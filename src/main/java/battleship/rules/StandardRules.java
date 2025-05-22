@@ -4,8 +4,13 @@ import battleship.model.*;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class StandardRules implements Rules {
+
+    public static final StandardRules INSTANCE = new StandardRules();
+
+    private StandardRules() {}
 
     @Override
     public int getVerticalLength() {
@@ -15,6 +20,19 @@ public class StandardRules implements Rules {
     @Override
     public int getHorizontalLength() {
         return 10;
+    }
+
+    private static Stream<Coordinate> toSurroundingCoordinates(final Coordinate coordinate) {
+        final Stream.Builder<Coordinate> result = Stream.builder();
+        result.accept(coordinate.plusColumn(1));
+        result.accept(coordinate.plusColumn(-1));
+        result.accept(coordinate.plusRow(1));
+        result.accept(coordinate.plusRow(-1));
+        result.accept(coordinate.plusColumn(1).plusRow(1));
+        result.accept(coordinate.plusColumn(1).plusRow(-1));
+        result.accept(coordinate.plusColumn(-1).plusRow(1));
+        result.accept(coordinate.plusColumn(-1).plusRow(-1));
+        return result.build();
     }
 
     @Override
